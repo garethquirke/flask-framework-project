@@ -1,0 +1,4 @@
+online store made through python framework called flask
+
+future:
+- turn into an api for use with mobile devices
