@@ -7,7 +7,7 @@ import distutils.filelist
 from distutils.util import convert_path
 from fnmatch import fnmatchcase
 
-from setuptools.extern.six.moves import filter, map
+from setuptools.extern.six.moves import filter, filterfalse, map
 
 import setuptools.version
 from setuptools.extension import Extension

@@ -16,15 +16,10 @@ from setuptools.extern import six
 from setuptools.extern.six.moves import map
 from pkg_resources.extern import packaging
 
-__import__('pkg_resources.extern.packaging.specifiers')
-__import__('pkg_resources.extern.packaging.version')
-
 from setuptools.depends import Require
 from setuptools import windows_support
 from setuptools.monkey import get_unpatched
-from setuptools.config import parse_configuration
 import pkg_resources
-from .py36compat import Distribution_parse_config_files
 
 
 def _get_unpatched(cls):
@@ -168,7 +163,7 @@ def check_specifier(dist, attr, value):
         packaging.specifiers.SpecifierSet(value)
     except packaging.specifiers.InvalidSpecifier as error:
         tmpl = (
-            "{attr!r} must be a string "
+            "{attr!r} must be a string or list of strings "
             "containing valid version specifiers; {error}"
         )
         raise DistutilsSetupError(tmpl.format(attr=attr, error=error))
@@ -217,7 +212,7 @@ def check_packages(dist, attr, value):
 _Distribution = get_unpatched(distutils.core.Distribution)
 
 
-class Distribution(Distribution_parse_config_files, _Distribution):
+class Distribution(_Distribution):
     """Distribution with support for features, tests, and package data
 
     This is an enhanced version of 'distutils.dist.Distribution' that
@@ -344,17 +339,6 @@ class Distribution(Distribution_parse_config_files, _Distribution):
                     "setuptools, pip, and PyPI. Please see PEP 440 for more "
                     "details." % self.metadata.version
                 )
-        if getattr(self, 'python_requires', None):
-            self.metadata.python_requires = self.python_requires
-
-    def parse_config_files(self, filenames=None):
-        """Parses configuration files from various levels
-        and loads configuration.
-
-        """
-        _Distribution.parse_config_files(self, filenames=filenames)
-
-        parse_configuration(self, self.command_options)
         if getattr(self, 'python_requires', None):
             self.metadata.python_requires = self.python_requires
 
