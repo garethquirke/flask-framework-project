@@ -1,0 +1,5 @@
+cmd /k "cd /d C:\Users\garet\College\Post College\flask-framework-project & 
+set FLASK_APP=app.py &
+set FLASK_DEBUG=1 &
+venv\Scripts\activate &
+python -m flask run"
