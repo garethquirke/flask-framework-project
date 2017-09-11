@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+
+<!-- Jinja templating engine -->
+
+{% block body %}
+    <h2>Stock</h2>
+
+    {% for guitar in guitars %}
+        <li class="list-group-item">
+        <a href = "guitar/{{guitar.ID}}">
+        {{guitar.Name}}
+        </li>
+    {% endfor%}
+
+{% endblock %}
