@@ -13,6 +13,20 @@ Guitars = OurGuitars()
 app = Flask(__name__)
 app.debug = True
 
+# mysql config
+# localhost:61259 
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'flaskapp'
+# a cursor is used to execute queries and return the data as a dictionary
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+# now init mysql
+mysql = MySQL(app)
+
+app.secret_key='secret505'
+
+
 @app.route('/')
 def welcome():
     return render_template('home.html')
@@ -41,5 +55,22 @@ class RegisterForm(Form):
 def register():
     form = RegisterForm(request.form)
     if request.method == 'POST' and form.validate():
-        return render_template('register.html')
+        name = form.name.data
+        email = form.email.data
+        username = form.username.data
+        password = sha256_crypt.encrypt(str(form.password.data))
+
+        # create the cursor
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO users(name, email, username, password) VALUES(%s,%s,%s,%s)", (name, email, username, password))
+
+
+        # commit to the db
+        mysql.connection.commit()
+
+        # close connection
+        cur.close()
+
+        flash('you are now registered and can log in', 'success')
+        return redirect(url_for('welcome'))
     return render_template('register.html', form=form)
