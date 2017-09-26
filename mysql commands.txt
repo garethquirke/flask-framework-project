@@ -1,0 +1,19 @@
+# mysql config
+# localhost:61259 
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'flaskapp'
+
+
+# first launch mysql through xamp and then open shell
+Commands:
+mysql -u root
+show databases;
+use flaskapp;
+
+show tables;
+select * from users;
+
+# to empty a table
+truncate users;
