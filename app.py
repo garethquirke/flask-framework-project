@@ -88,7 +88,7 @@ def login():
 
         # create a cursor and query the db
         cur = mysql.connection.cursor()
-        result = curr.execute("SELECT * FROM users WHERE username = %s", [username])
+        result = cur.execute("SELECT * FROM users WHERE username = %s", [username])
 
         if result > 0: # row found
             data = cur.fetchone()
@@ -96,8 +96,12 @@ def login():
             # comparing entered password with db result
             if sha256_crypt.verify(password_candidate, password):
                 app.logger.info('PASSWORD is a match')
+            else:
+                error = 'invalid login'
+                return render_template('login.html', error=error)
             
         else:
-            app.logger.info('invalid user')
+            error = 'username not found'
+            return render_template('login.html', error=error)
 
     return render_template('login.html')

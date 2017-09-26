@@ -5,3 +5,26 @@
     {% endfor %}
   {% endif %}
 {% endwith %}
+
+
+<!--
+
+  If there is an error on the login screen
+-->
+{% if error %}
+<div class="alert alert-danger">
+  {{error}}
+</div>
+{% endif %}
+
+
+
+<!--
+
+  After a succesful login
+-->
+{% if msg %}
+<div class="alert alert-success">
+  {{msg}}
+</div>
+{% endif %}
