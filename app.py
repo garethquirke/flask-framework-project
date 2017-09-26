@@ -74,3 +74,28 @@ def register():
         flash('you are now registered and can log in', 'success')
         return redirect(url_for('welcome'))
     return render_template('register.html', form=form)
+
+
+# User Login
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        # get inputs from user
+        username = request.form['username']
+        password_candidate = request.form['password']
+
+        # create a cursor and query the db
+        cur = mysql.connection.cursor()
+        result = curr.execute("SELECT * FROM users WHERE username = %s", [username])
+
+        if result > 0: # row found
+            data = cur.fetchone()
+            password = data['password']
+            # comparing entered password with db result
+            if sha256_crypt.verify(password_candidate, password):
+                app.logger.info('PASSWORD is a match')
+            
+        else:
+            app.logger.info('invalid user')
+
+    return render_template('login.html')
